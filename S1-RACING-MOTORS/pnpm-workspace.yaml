@@ -1,0 +1,10 @@
+# Só serve para o desenvolvimento nesta máquina (o npm daqui está
+# quebrado; ver o histórico do SkyBase). O Netlify roda `npm install` e
+# ignora este arquivo por completo.
+packages:
+  - frontend
+
+# O pnpm bloqueia postinstall por padrão. O esbuild PRECISA do dele —
+# é ele que baixa o binário nativo sem o qual o `vite build` não roda.
+allowBuilds:
+  esbuild: true

@@ -1,0 +1,25 @@
+{
+  "name": "racing-motors-gestao",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Racing Motors — Sistema de Gestao de oficina",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "comentario": "As dependencias do backend ficam AQUI na raiz porque o bundler das Netlify Functions resolve node_modules a partir da raiz do repositorio. backend/package.json repete a mesma lista para o dev e os testes locais — se mexer numa, mexa na outra.",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.12.0",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@electric-sql/pglite-socket": "^0.2.11"
+  }
+}

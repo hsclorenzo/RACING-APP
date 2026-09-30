@@ -1,0 +1,41 @@
+# =====================================================================
+# S1 RACING MOTORS — Netlify
+# Um unico deploy carrega o frontend (React/Vite) e o backend (Express
+# dentro de uma Function). Banco fica no Neon. Custo: R$ 0.
+# =====================================================================
+
+[build]
+  # Duas instalacoes de proposito: a raiz tem as dependencias do backend
+  # (o bundler das Functions resolve node_modules a partir da raiz) e o
+  # frontend tem as dele. `npm install` e nao `npm ci`: sem
+  # package-lock.json versionado, `npm ci` aborta — e essa e a causa mais
+  # comum de deploy que falha antes de qualquer erro de codigo.
+  command = "npm install && cd frontend && npm install && npm run build"
+  publish = "frontend/dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS = "--no-audit --no-fund"
+
+[functions]
+  node_bundler = "esbuild"
+  # BANCO-COMPLETO.sql e lido do disco pela rota de migrations. Sem esta
+  # linha o esbuild empacota so o JS e o arquivo .sql nao sobe junto — a
+  # rota responderia "arquivo nao encontrado" em producao e funcionaria
+  # perfeitamente na maquina.
+  included_files = ["backend/BANCO-COMPLETO.sql"]
+
+# /api/* do frontend cai na Function. O :splat preserva o resto do
+# caminho, entao /api/auth/login chega no Express como /api/auth/login.
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+# Qualquer outra rota devolve o index.html e o React cuida da navegacao.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
